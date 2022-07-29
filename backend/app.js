@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+//to put MongoDB access credentials in .env variable
+const dotenv = require('dotenv');
+dotenv.config();
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
@@ -8,13 +11,14 @@ const sauceRoutes = require('./routes/sauce');
 const app = express();
 
 //Connect to MongoDB with mongoose
-mongoose.connect('mongodb+srv://kaminda:gddpfw64@cluster0.4dih33v.mongodb.net/piiquante?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.4dih33v.mongodb.net/piiquante?retryWrites=true&w=majority`,
 { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
+ //to handle POST request, we need to extract the JSON body:
+ app.use(express.json());
 
 //for CORS errors
 app.use((req, res, next) => {
@@ -23,9 +27,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
- //to handle POST request, we need to extract the JSON body:
-app.use(express.json());
 
 //authentification routes
 app.use('/api/auth', userRoutes);
