@@ -33,6 +33,6 @@ app.use('/api/auth', userRoutes);
 //sauces routes
 app.use('/api/sauces', sauceRoutes);
 //routing handler
-app.use('/images', express.static(path.join(__dirname, 'image')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
