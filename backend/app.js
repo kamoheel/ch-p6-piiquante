@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+//helmet helps protect from a few vulnerabilities by setting up HTTP headers
+const helmet = require('helmet');
 //to put MongoDB access credentials in .env variable
 const dotenv = require('dotenv');
 dotenv.config();
@@ -17,8 +19,10 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
- //to handle POST request, we need to extract the JSON body:
- app.use(express.json());
+//Uses the default Helmet options and adds the `crossOriginResourcePolicy` middleware that allows images
+app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
+//to handle POST request, we need to extract the JSON body:
+app.use(express.json());
 
 //for CORS errors
 app.use((req, res, next) => {

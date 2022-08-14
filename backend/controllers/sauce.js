@@ -1,5 +1,5 @@
 const Sauce = require('../models/Sauce');
-//for delete function:
+//for delete function, to remove the image:
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
