@@ -42,9 +42,19 @@ exports.modifySauce = (req, res, next) => {
             if (sauce.userId != req.auth.userId) {
                 res.status(403).json({ message : 'Unauthorized request'});
             } else {
-                Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
-                .then(() => res.status(200).json({message : 'Sauce modifiée!'}))
-                .catch(error => res.status(401).json({ error }));
+                if(req.file) {
+                    //delete previous image if a file(img) was added
+                    const filename = sauce.imageUrl.split('/images/')[1];
+                    fs.unlink(`images/${filename}`, () => {
+                    Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+                    .then(() => res.status(200).json({message : 'Sauce modifiée!'}))
+                    .catch(error => res.status(401).json({ error }));
+                    });
+                } else {
+                    Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+                    .then(() => res.status(200).json({message : 'Sauce modifiée!'}))
+                    .catch(error => res.status(401).json({ error }));
+                }
             }
         })
         .catch((error) => {
