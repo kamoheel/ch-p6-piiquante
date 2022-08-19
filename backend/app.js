@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', userRoutes);
 //sauces routes
 app.use('/api/sauces', sauceRoutes);
-//routing handler
+//routing handler : indique notre app.js comment traiter les requêtes vers la route /images en randant le dossier images statique
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
